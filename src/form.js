@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 
+import styleClasses from "./form.module.css";
 class Form extends Component {
   constructor(props) {
     super(props);
@@ -11,8 +12,12 @@ class Form extends Component {
   }
 
   handleChange(e) {
+    let { value } = e.target;
+
+    if (value === "") value = 0;
+    value = parseInt(value.toString());
     this.setState({
-      sides: e.target.value
+      sides: value
     });
   }
 
@@ -48,7 +53,7 @@ class Form extends Component {
   render() {
     const { pi, err } = this.getPi();
     return (
-      <div className="form">
+      <aside className={styleClasses.form_container}>
         <section className="form-container">
           <label>Maximum sides number</label>
           <input
@@ -57,14 +62,14 @@ class Form extends Component {
             onChange={this.handleChange}
           />
         </section>
-        <section class="result">
+        <section className="result">
           <h1>In a {this.state.sides} sides polygon</h1>
           <p>
             The value of <b>PI</b> is {pi}
           </p>
           <p>With an error of {err}</p>
         </section>
-      </div>
+      </aside>
     );
   }
 }
