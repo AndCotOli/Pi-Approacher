@@ -46,17 +46,14 @@ class Form extends Component {
 
   componentDidMount() {
     this.interval = setInterval(() => {
-      if (this.state.err <= this.refs.minErr.current.value)
-        return clearInterval();
       this.inputRef.current.value++;
       this.setState({ sides: this.inputRef.current.value++ });
       this.getPi();
-    }, 1).bind(this);
+    }, 1);
   }
 
   render() {
     this.inputRef = React.createRef();
-    this.minErr = React.createRef();
     return (
       <div className={styleClasses.form_container}>
         <section className="form-container">
@@ -69,8 +66,9 @@ class Form extends Component {
             name="sides"
             ref={this.inputRef}
           />
-          <label>Minimum error </label>
-          <input type="number" min="0" ref={this.minErr} />
+          <button onClick={() => clearInterval(this.interval)}>
+            Stop Animation
+          </button>
         </section>
         <section className="result">
           <h1>In a {this.state.sides} sides polygon</h1>
