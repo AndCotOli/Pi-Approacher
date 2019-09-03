@@ -38,14 +38,7 @@ class Animation extends Component {
 
   render() {
     this.canvasRef = React.createRef();
-    return (
-      <div>
-        <h3>My animation</h3>
-        <p>{this.props.sides}</p>
-        <p>{this.props.err}</p>
-        <div ref={this.canvasRef} />
-      </div>
-    );
+    return <div ref={this.canvasRef} />;
   }
 }
 
