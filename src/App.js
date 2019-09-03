@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 
 import Form from "./form";
-import Formula from "./formula";
 
 import styleClasses from "./app.module.css";
 
@@ -12,7 +11,6 @@ class App extends Component {
         <h1 className={styleClasses.header}>Pi Approacher Project</h1>
         <main className={styleClasses.content}>
           <Form />
-          <Formula />
         </main>
       </div>
     );

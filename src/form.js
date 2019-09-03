@@ -1,23 +1,27 @@
 import React, { Component } from "react";
 
+import Animation from "./animation";
+
 import styleClasses from "./form.module.css";
 class Form extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      sides: 0
+      sides: 0,
+      err: Infinity,
+      pi: 0
     };
 
     this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange(e) {
-    let { value } = e.target;
+    let { value, name } = e.target;
 
     if (value === "") value = 0;
     value = parseInt(value.toString());
     this.setState({
-      sides: value
+      [name]: value
     });
   }
 
@@ -37,39 +41,46 @@ class Form extends Component {
     let pi = (a / 2 / r + b / 2 / r) / 2;
     let err = Math.abs(a / 2 / r - b / 2 / r) / 2;
 
-    let data = {
-      r,
-      n,
-      a,
-      b,
-      m,
-      pi,
-      err
-    };
+    this.setState({ pi, err });
+  }
 
-    return data;
+  componentDidMount() {
+    this.interval = setInterval(() => {
+      if (this.state.err <= this.refs.minErr.current.value)
+        return clearInterval();
+      this.inputRef.current.value++;
+      this.setState({ sides: this.inputRef.current.value++ });
+      this.getPi();
+    }, 1).bind(this);
   }
 
   render() {
-    const { pi, err } = this.getPi();
+    this.inputRef = React.createRef();
+    this.minErr = React.createRef();
     return (
-      <aside className={styleClasses.form_container}>
+      <div className={styleClasses.form_container}>
         <section className="form-container">
-          <label>Maximum sides number</label>
+          <label>Maximum sides number </label>
           <input
             type="number"
             value={this.state.sides}
             onChange={this.handleChange}
+            min="0"
+            name="sides"
+            ref={this.inputRef}
           />
+          <label>Minimum error </label>
+          <input type="number" min="0" ref={this.minErr} />
         </section>
         <section className="result">
           <h1>In a {this.state.sides} sides polygon</h1>
           <p>
-            The value of <b>PI</b> is {pi}
+            The value of <b>PI</b> is {this.state.pi}
           </p>
-          <p>With an error of {err}</p>
+          <p>With an error of {this.state.err}</p>
         </section>
-      </aside>
+        <Animation sides={this.state.sides} err={this.state.err} />
+      </div>
     );
   }
 }
